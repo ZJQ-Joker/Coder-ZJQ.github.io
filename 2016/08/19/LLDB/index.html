@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"coder-zjq.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="什么是 LLDB？ LLDB 是一个有着 REPL（交互式）的特性和 C++ ，Python 插件的开源调试器； LLDB 是 Xcode 中默认的调试器，支持在桌面、iOS 设备以及 iOS 模拟器上调试以 C 语言、Objective-C 或者 C ++ 编写的程序； LLDB 允许你在程序运行的特定时暂停它，你可以查看变量的值，执行自定的指令，并且按照你所认为合适的步骤来操作程序的进展。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLDB — 让调试更有趣">
+<meta property="og:url" content="https://coder-zjq.github.io/2016/08/19/LLDB/index.html">
+<meta property="og:site_name" content="ZJQ&#39;s Blog">
+<meta property="og:description" content="什么是 LLDB？ LLDB 是一个有着 REPL（交互式）的特性和 C++ ，Python 插件的开源调试器； LLDB 是 Xcode 中默认的调试器，支持在桌面、iOS 设备以及 iOS 模拟器上调试以 C 语言、Objective-C 或者 C ++ 编写的程序； LLDB 允许你在程序运行的特定时暂停它，你可以查看变量的值，执行自定的指令，并且按照你所认为合适的步骤来操作程序的进展。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/801b780agw1f6ypwim8rpj20ex0693zy.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/801b780agw1f6ypwwtyzbj20eo01lq3c.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/801b780agw1f6ypyaz7pzj20b801i74i.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/801b780agw1f6ypyjfpuzj20bk02oq37.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/801b780agw1f6ypytojm9j207301kt8u.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/801b780agw1f6yr04sauoj209202qq35.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/801b780agw1f6yqzvlh51j20cr030aal.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/801b780agw1f6yqzo0t8wj20bx00sjrk.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/801b780agw1f6yqzfn33qj20c00ji3yw.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/801b780agw1f6yqz6tqduj20bg01idg5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/801b780agw1f6yqyvmxt6j20c00ji3yz.jpg">
+<meta property="article:published_time" content="2016-08-18T23:41:06.000Z">
+<meta property="article:modified_time" content="2020-04-26T08:32:34.000Z">
+<meta property="article:author" content="ZJQ">
+<meta property="article:tag" content="LLDB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/801b780agw1f6ypwim8rpj20ex0693zy.jpg">
+
+<link rel="canonical" href="https://coder-zjq.github.io/2016/08/19/LLDB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LLDB — 让调试更有趣 | ZJQ's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?31152cf49e0895a123b39ede0cf79fc9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ZJQ's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">28</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404.html" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/coder-zjq" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://coder-zjq.github.io/2016/08/19/LLDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpeg">
+      <meta itemprop="name" content="ZJQ">
+      <meta itemprop="description" content="Always Be Coding...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZJQ's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LLDB — 让调试更有趣<a href="https://github.com/coder-zjq/BlogSource/edit/master/source/_posts/LLDB.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-08-19 07:41:06" itemprop="dateCreated datePublished" datetime="2016-08-19T07:41:06+08:00">2016-08-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-26 16:32:34" itemprop="dateModified" datetime="2020-04-26T16:32:34+08:00">2020-04-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">Technology</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Debug/" itemprop="url" rel="index"><span itemprop="name">Debug</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Debug/LLDB/" itemprop="url" rel="index"><span itemprop="name">LLDB</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2016/08/19/LLDB/" class="post-meta-item leancloud_visitors" data-flag-title="LLDB — 让调试更有趣" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2016/08/19/LLDB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2016/08/19/LLDB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="什么是-LLDB？"><a href="#什么是-LLDB？" class="headerlink" title="什么是 LLDB？"></a>什么是 <a href="http://lldb.llvm.org" target="_blank" rel="noopener">LLDB</a>？</h3><ul>
+<li>LLDB 是一个有着 REPL（交互式）的特性和 C++ ，Python 插件的开源调试器；</li>
+<li>LLDB 是 Xcode 中默认的调试器，支持在桌面、iOS 设备以及 iOS 模拟器上调试以 C 语言、Objective-C 或者 C ++ 编写的程序；</li>
+<li>LLDB 允许你在程序运行的特定时暂停它，你可以查看变量的值，执行自定的指令，并且按照你所认为合适的步骤来操作程序的进展。</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h3 id="LLDB-简单使用"><a href="#LLDB-简单使用" class="headerlink" title="LLDB 简单使用"></a>LLDB 简单使用</h3><p>在此之前你可能已经使用过 LLDB ，也许只是在 Xcode 的界面上加一些断点，查看一些变量的值。但是通过一些小的技巧，你就可以做一些非常酷的事情。</p>
+<h4 id="help-—-指令帮助"><a href="#help-—-指令帮助" class="headerlink" title="help — 指令帮助"></a><em>help</em> — 指令帮助</h4><p><code>help</code> 是最简单的指令，输入 <code>help</code>便会为你列举所有的命令。同时，如果你忘记一条指令的作用或者想要知道更多，你便可以输入 <code>help &lt;command&gt;</code> 其中 <code>&lt;command&gt;</code> 为你想要了解的指令，例如： <code>help print</code>。</p>
+<p><img src="http://ww1.sinaimg.cn/large/801b780agw1f6ypwim8rpj20ex0693zy.jpg" alt="help"></p>
+<p><img src="http://ww4.sinaimg.cn/large/801b780agw1f6ypwwtyzbj20eo01lq3c.jpg" alt="help print"></p>
+<h4 id="p-amp-po-—-打印变量或者对象"><a href="#p-amp-po-—-打印变量或者对象" class="headerlink" title="p &amp; po — 打印变量或者对象"></a><em>p</em> &amp; <em>po</em> — 打印变量或者对象</h4><p>因为 LLDB 支持前缀匹配，因此你可以将 <code>print</code> 简写为 <code>p</code> 或者 <code>pri</code> ，而 <code>print</code> 则代表 <code>expression --</code> ；<code>po</code> 则代表 <code>expression -O --</code> ，意为 print object ，打印对象。<br>输入 <code>p</code> 指令可打印其对象类型、内存地址以及该对象的值等具体信息，而 <code>po</code> 指令则是打印其调用 <code>description</code> 方法得到的值。</p>
+<p><em>(注：打印集合类型对象时，<code>p</code>指令会省略具体的值，只提示集合的数量等信息，因此若需查看集合中的值应使用 <code>po</code>指令，如下图所示：)</em>   </p>
+<h5 id="打印-NSString"><a href="#打印-NSString" class="headerlink" title="打印 NSString :"></a>打印 NSString :</h5><p><img src="http://ww3.sinaimg.cn/large/801b780agw1f6ypyaz7pzj20b801i74i.jpg" alt="p &amp; po NSString"></p>
+<h5 id="打印-NSDictionary"><a href="#打印-NSDictionary" class="headerlink" title="打印 NSDictionary :"></a>打印 NSDictionary :</h5><p><img src="http://ww2.sinaimg.cn/large/801b780agw1f6ypyjfpuzj20bk02oq37.jpg" alt="p &amp; po NSDictionary"></p>
+<h5 id="打印-Person"><a href="#打印-Person" class="headerlink" title="打印 Person :"></a>打印 Person :</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - 自定义Person类</span></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span> : <span class="title">NSObject</span></span></span><br><span class="line"><span class="comment">/** 名字 */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;</span><br><span class="line"><span class="comment">/** 年龄 */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">NSInteger</span> age;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span></span></span><br><span class="line"><span class="comment">/** 重写description方法 */</span></span><br><span class="line">- (<span class="built_in">NSString</span> *)description&#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"name:%@,age:%ld"</span>, <span class="keyword">self</span>.name, <span class="keyword">self</span>.age];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - main函数</span></span><br><span class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) &#123;</span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">        Person *p = [[Person alloc] init];</span><br><span class="line">        p.name = <span class="string">@"Joker"</span>;</span><br><span class="line">        p.age = <span class="number">23</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://ww2.sinaimg.cn/large/801b780agw1f6ypytojm9j207301kt8u.jpg" alt="p &amp; po Person"></p>
+<h5 id="指定格式打印："><a href="#指定格式打印：" class="headerlink" title="指定格式打印："></a>指定格式打印：</h5><ul>
+<li>以二进制打印<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p&#x2F;t 23</span><br><span class="line">(int) $0 &#x3D; 0b00000000000000000000000000010111</span><br></pre></td></tr></table></figure></li>
+<li>以八进制打印<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p&#x2F;o 23</span><br><span class="line">(int) $1 &#x3D; 027</span><br></pre></td></tr></table></figure></li>
+<li>以十六进制打印<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p&#x2F;x 23</span><br><span class="line">(int) $2 &#x3D; 0x00000017</span><br></pre></td></tr></table></figure></li>
+<li>以二进制打印，且只打印一个字节即八位(char类型只占据一个字节的内存)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p&#x2F;t (char)23</span><br><span class="line">(char) $3 &#x3D; 0b00010111</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h4 id="expression-—-改变值"><a href="#expression-—-改变值" class="headerlink" title="expression — 改变值"></a><em>expression</em> — 改变值</h4><p>如果你想在调试的时候改变一个已有的值，那么你可以使用<code>expression</code>指令，也可以简写为<code>e</code></p>
+<ul>
+<li><p>在打印前添加断点：<br><img src="http://ww4.sinaimg.cn/large/801b780agw1f6yr04sauoj209202qq35.jpg" alt="添加断点"></p>
+</li>
+<li><p>利用LLDB查看并修改已经定义的值：<br><img src="http://ww4.sinaimg.cn/large/801b780agw1f6yqzvlh51j20cr030aal.jpg" alt="查看并修改"></p>
+</li>
+<li><p>继续运行查看打印结果<br><img src="http://ww4.sinaimg.cn/large/801b780agw1f6yqzo0t8wj20bx00sjrk.jpg" alt="查看打印"></p>
+</li>
+</ul>
+<p>可以看到之前定义的值通过LLDB已经成功被修改了。</p>
+<hr>
+<h3 id="LLDB更新UI"><a href="#LLDB更新UI" class="headerlink" title="LLDB更新UI"></a>LLDB更新UI</h3><p>既然LLDB可以修改已定义的值，那么LLDB能否在调试时修改UI中各类控件属性，以实现在不重新运行程序的情况下，更新UI查看效果？接下来进行验证：</p>
+<ul>
+<li><p>新建一个iOS项目，运行并断点，查看当前界面效果<br><img src="http://ww1.sinaimg.cn/large/801b780agw1f6yqzfn33qj20c00ji3yw.jpg" alt="原始界面"></p>
+</li>
+<li><p>LLDB中改变控制器view背景<br><img src="http://ww1.sinaimg.cn/large/801b780agw1f6yqz6tqduj20bg01idg5.jpg" alt="LLDB更新UI"></p>
+</li>
+<li><p>界面已经更新，变为绿色<br><img src="http://ww1.sinaimg.cn/large/801b780agw1f6yqyvmxt6j20c00ji3yz.jpg" alt="改变界面"></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/LLDB/" rel="tag"><i class="fa fa-tag"></i> LLDB</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/08/16/difference-between-self-and-super-in-Objective-C/" rel="prev" title="Objective-C 中 self 与 super 的区别">
+      <i class="fa fa-chevron-left"></i> Objective-C 中 self 与 super 的区别
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/08/27/block/" rel="next" title="block 的使用">
+      block 的使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-LLDB？"><span class="nav-number">1.</span> <span class="nav-text">什么是 LLDB？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLDB-简单使用"><span class="nav-number">2.</span> <span class="nav-text">LLDB 简单使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#help-—-指令帮助"><span class="nav-number">2.1.</span> <span class="nav-text">help — 指令帮助</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#p-amp-po-—-打印变量或者对象"><span class="nav-number">2.2.</span> <span class="nav-text">p &amp; po — 打印变量或者对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#打印-NSString"><span class="nav-number">2.2.1.</span> <span class="nav-text">打印 NSString :</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#打印-NSDictionary"><span class="nav-number">2.2.2.</span> <span class="nav-text">打印 NSDictionary :</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#打印-Person"><span class="nav-number">2.2.3.</span> <span class="nav-text">打印 Person :</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#指定格式打印："><span class="nav-number">2.2.4.</span> <span class="nav-text">指定格式打印：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#expression-—-改变值"><span class="nav-number">2.3.</span> <span class="nav-text">expression — 改变值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLDB更新UI"><span class="nav-number">3.</span> <span class="nav-text">LLDB更新UI</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZJQ"
+      src="/uploads/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ZJQ</p>
+  <div class="site-description" itemprop="description">Always Be Coding...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Coder-ZJQ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Coder-ZJQ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zjq_joker@163.com" title="E-Mail → mailto:zjq_joker@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/105506194418471567135" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;105506194418471567135" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/zjq.joker" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;zjq.joker" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/users/7356960/jokerq" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;users&#x2F;7356960&#x2F;jokerq" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://developer.apple.com/reference/" title="https:&#x2F;&#x2F;developer.apple.com&#x2F;reference&#x2F;" rel="noopener" target="_blank">Apple Developer Documentation</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://developer.apple.com/library/prerelease/content/navigation/" title="https:&#x2F;&#x2F;developer.apple.com&#x2F;library&#x2F;prerelease&#x2F;content&#x2F;navigation&#x2F;" rel="noopener" target="_blank">Apple Documentation Archive</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://opensource.apple.com/" title="https:&#x2F;&#x2F;opensource.apple.com&#x2F;" rel="noopener" target="_blank">Apple Open Source</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://dribbble.com/" title="https:&#x2F;&#x2F;dribbble.com&#x2F;" rel="noopener" target="_blank">dribbble</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pttrns.com/" title="https:&#x2F;&#x2F;pttrns.com&#x2F;" rel="noopener" target="_blank">pttrns</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.deviantart.com/" title="http:&#x2F;&#x2F;www.deviantart.com&#x2F;" rel="noopener" target="_blank">deviant art</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZJQ</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">53k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">48 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"NDR4ht5tQMwY98BfVRpuVxev-gzGzoHsz","app_key":"t8QAyw6QhVkCuOx3FUpHNehq","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NDR4ht5tQMwY98BfVRpuVxev-gzGzoHsz',
+      appKey     : 't8QAyw6QhVkCuOx3FUpHNehq',
+      placeholder: "Leave a comment",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

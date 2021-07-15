@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"coder-zjq.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Type Alias1typealias AudioSample &#x3D; UInt16    Optional Binding if let ... { ... }  123if let constantName &#x3D; someOptional &amp;#123;  &#x2F;&#x2F; statements&amp;#125;   while let ... { ... }  123while let constantName &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录 swift 中的一些关键字及操作符">
+<meta property="og:url" content="https://coder-zjq.github.io/2021/07/15/swift-keyword-operator/index.html">
+<meta property="og:site_name" content="ZJQ&#39;s Blog">
+<meta property="og:description" content="Type Alias1typealias AudioSample &#x3D; UInt16    Optional Binding if let ... { ... }  123if let constantName &#x3D; someOptional &amp;#123;  &#x2F;&#x2F; statements&amp;#125;   while let ... { ... }  123while let constantName &#x3D;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-15T01:23:19.000Z">
+<meta property="article:modified_time" content="2021-07-15T08:21:13.000Z">
+<meta property="article:author" content="ZJQ">
+<meta property="article:tag" content="swift">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://coder-zjq.github.io/2021/07/15/swift-keyword-operator/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记录 swift 中的一些关键字及操作符 | ZJQ's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?31152cf49e0895a123b39ede0cf79fc9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ZJQ's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">28</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404.html" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/coder-zjq" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://coder-zjq.github.io/2021/07/15/swift-keyword-operator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpeg">
+      <meta itemprop="name" content="ZJQ">
+      <meta itemprop="description" content="Always Be Coding...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZJQ's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录 swift 中的一些关键字及操作符<a href="https://github.com/coder-zjq/BlogSource/edit/master/source/_posts/swift-keyword-operator.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-15 09:23:19 / 修改时间：16:21:13" itemprop="dateCreated datePublished" datetime="2021-07-15T09:23:19+08:00">2021-07-15</time>
+            </span>
+
+          
+            <span id="/2021/07/15/swift-keyword-operator/" class="post-meta-item leancloud_visitors" data-flag-title="记录 swift 中的一些关键字及操作符" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/07/15/swift-keyword-operator/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/15/swift-keyword-operator/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="Type-Alias"><a href="#Type-Alias" class="headerlink" title="Type Alias"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#ID327" target="_blank" rel="noopener">Type Alias</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typealias</span> <span class="type">AudioSample</span> = <span class="type">UInt16</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Optional-Binding"><a href="#Optional-Binding" class="headerlink" title="Optional Binding"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#ID333" target="_blank" rel="noopener">Optional Binding</a></h4><ul>
+<li><code>if let ... { ... }</code></li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> constantName = someOptional &#123;</span><br><span class="line">  <span class="comment">// statements</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>while let ... { ... }</code></li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="keyword">let</span> constantName = someOptional &#123;</span><br><span class="line">  <span class="comment">// statements</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h4 id="Early-Exit"><a href="#Early-Exit" class="headerlink" title="Early Exit"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID525" target="_blank" rel="noopener">Early Exit</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">guard</span> <span class="keyword">let</span> constantName = someOptional &#123;</span><br><span class="line">  <span class="comment">// statements</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Debugging-with-Assertions"><a href="#Debugging-with-Assertions" class="headerlink" title="Debugging with Assertions"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#ID336" target="_blank" rel="noopener">Debugging with Assertions</a></h4><ul>
+<li><code>assert(...)</code></li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> age = -<span class="number">3</span></span><br><span class="line"><span class="built_in">assert</span>(age &gt;= <span class="number">0</span>, <span class="string">"A person's age can't be less than zero."</span>)</span><br><span class="line"><span class="comment">// This assertion fails because -3 isn't &gt;= 0.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>assertionFailure(...)</code>(<a href=""></a>)</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> age &gt; <span class="number">10</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"You can ride the roller-coaster or the ferris wheel."</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> age &gt;= <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"You can ride the ferris wheel."</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">assertionFailure</span>(<span class="string">"A person's age can't be less than zero."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Enforcing-Preconditions"><a href="#Enforcing-Preconditions" class="headerlink" title="Enforcing Preconditions"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#ID554" target="_blank" rel="noopener">Enforcing Preconditions</a></h4><ul>
+<li><code>precondition(...)</code></li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In the implementation of a subscript...</span></span><br><span class="line"><span class="built_in">precondition</span>(index &gt; <span class="number">0</span>, <span class="string">"Index must be greater than zero."</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>preconditionFailure(...)</code></li>
+</ul>
+<h4 id="Fatal-Error"><a href="#Fatal-Error" class="headerlink" title="Fatal Error"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#ID554" target="_blank" rel="noopener">Fatal Error</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">fatalError</span>(<span class="string">"Unimplemented"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Fallthrough"><a href="#Fallthrough" class="headerlink" title="Fallthrough"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID140" target="_blank" rel="noopener">Fallthrough</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> integerToDescribe = <span class="number">5</span></span><br><span class="line"><span class="keyword">var</span> description = <span class="string">"The number \(integerToDescribe) is"</span></span><br><span class="line"><span class="keyword">switch</span> integerToDescribe &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>:</span><br><span class="line">    description += <span class="string">" a prime number, and also"</span></span><br><span class="line">    <span class="keyword">fallthrough</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    description += <span class="string">" an integer."</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(description)</span><br><span class="line"><span class="comment">// Prints "The number 5 is a prime number, and also an integer."</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="where-in-switch"><a href="#where-in-switch" class="headerlink" title="where in switch"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID134" target="_blank" rel="noopener">where in switch</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> yetAnotherPoint = (<span class="number">1</span>, -<span class="number">1</span>)</span><br><span class="line"><span class="keyword">switch</span> yetAnotherPoint &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y) <span class="keyword">where</span> x == y:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"(\(x), \(y)) is on the line x == y"</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y) <span class="keyword">where</span> x == -y:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"(\(x), \(y)) is on the line x == -y"</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"(\(x), \(y)) is just some arbitrary point"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints "(1, -1) is on the line x == -y"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Labeled-Statements"><a href="#Labeled-Statements" class="headerlink" title="Labeled Statements"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID141" target="_blank" rel="noopener">Labeled Statements</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">gameLoop: <span class="keyword">while</span> square != finalSquare &#123;</span><br><span class="line">    diceRoll += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> diceRoll == <span class="number">7</span> &#123; diceRoll = <span class="number">1</span> &#125;</span><br><span class="line">    <span class="keyword">switch</span> square + diceRoll &#123;</span><br><span class="line">    <span class="keyword">case</span> finalSquare:</span><br><span class="line">        <span class="comment">// diceRoll will move us to the final square, so the game is over</span></span><br><span class="line">        <span class="keyword">break</span> gameLoop</span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">let</span> newSquare <span class="keyword">where</span> newSquare &gt; finalSquare:</span><br><span class="line">        <span class="comment">// diceRoll will move us beyond the final square, so roll again</span></span><br><span class="line">        <span class="keyword">continue</span> gameLoop</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">// this is a valid move, so find out its effect</span></span><br><span class="line">        square += diceRoll</span><br><span class="line">        square += board[square]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"Game over!"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Checking-API-Availability"><a href="#Checking-API-Availability" class="headerlink" title="Checking API Availability"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID523" target="_blank" rel="noopener">Checking API Availability</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> #available(iOS <span class="number">10</span>, macOS <span class="number">10.12</span>, *) &#123;</span><br><span class="line">    <span class="comment">// Use iOS 10 APIs on iOS, and use macOS 10.12 APIs on macOS</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// Fall back to earlier iOS and macOS APIs</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Variadic-Parameters"><a href="#Variadic-Parameters" class="headerlink" title="Variadic Parameters"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Functions.html#ID171" target="_blank" rel="noopener">Variadic Parameters</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">arithmeticMean</span><span class="params">(<span class="number">_</span> numbers: Double...)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> total: <span class="type">Double</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> numbers &#123;</span><br><span class="line">        total += number</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> total / <span class="type">Double</span>(numbers.<span class="built_in">count</span>)</span><br><span class="line">&#125;</span><br><span class="line">arithmeticMean(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line"><span class="comment">// returns 3.0, which is the arithmetic mean of these five numbers</span></span><br><span class="line">arithmeticMean(<span class="number">3</span>, <span class="number">8.25</span>, <span class="number">18.75</span>)</span><br><span class="line"><span class="comment">// returns 10.0, which is the arithmetic mean of these three numbers</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="In-Out-Parameters"><a href="#In-Out-Parameters" class="headerlink" title="In-Out Parameters"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Functions.html#ID173" target="_blank" rel="noopener">In-Out Parameters</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">swapTwoInts</span><span class="params">(<span class="number">_</span> a: <span class="keyword">inout</span> Int, <span class="number">_</span> b: <span class="keyword">inout</span> Int)</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> temporaryA = a</span><br><span class="line">    a = b</span><br><span class="line">    b = temporaryA</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> someInt = <span class="number">3</span></span><br><span class="line"><span class="keyword">var</span> anotherInt = <span class="number">107</span></span><br><span class="line">swapTwoInts(&amp;someInt, &amp;anotherInt)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"someInt is now \(someInt), and anotherInt is now \(anotherInt)"</span>)</span><br><span class="line"><span class="comment">// Prints "someInt is now 107, and anotherInt is now 3"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Escaping-Closures"><a href="#Escaping-Closures" class="headerlink" title="Escaping Closures"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID546" target="_blank" rel="noopener">Escaping Closures</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> completionHandlers: [() -&gt; <span class="type">Void</span>] = []</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">someFunctionWithEscapingClosure</span><span class="params">(completionHandler: @escaping <span class="params">()</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">    completionHandlers.append(completionHandler)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Autoclosures"><a href="#Autoclosures" class="headerlink" title="Autoclosures"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID543" target="_blank" rel="noopener">Autoclosures</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// customersInLine is ["Ewa", "Barry", "Daniella"]</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">serve</span><span class="params">(customer customerProvider: @autoclosure <span class="params">()</span></span></span> -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Now serving \(customerProvider())!"</span>)</span><br><span class="line">&#125;</span><br><span class="line">serve(customer: customersInLine.remove(at: <span class="number">0</span>))</span><br><span class="line"><span class="comment">// Prints "Now serving Ewa!"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="mutating"><a href="#mutating" class="headerlink" title="mutating"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Methods.html#ID239" target="_blank" rel="noopener">mutating</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">SomeProtocol</span> </span>&#123;</span><br><span class="line">    <span class="keyword">mutating</span> <span class="function"><span class="keyword">func</span> <span class="title">someFunction</span><span class="params">()</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SomeStructure</span>: <span class="title">SomeProtocol</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> someVariable = <span class="number">1</span></span><br><span class="line">    <span class="keyword">mutating</span> <span class="function"><span class="keyword">func</span> <span class="title">someFunction</span><span class="params">()</span></span> &#123;</span><br><span class="line">        someVariable = <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>: <span class="title">SomeProtocol</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> someVariable = <span class="number">1</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">someFunction</span><span class="params">()</span></span> &#123;</span><br><span class="line">        someVariable = <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">0.0</span>, y = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">mutating</span> <span class="function"><span class="keyword">func</span> <span class="title">moveBy</span><span class="params">(x deltaX: Double, y deltaY: Double)</span></span> &#123;</span><br><span class="line">        <span class="keyword">self</span> = <span class="type">Point</span>(x: x + deltaX, y: y + deltaY)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">TriStateSwitch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> off, low, high</span><br><span class="line">    <span class="keyword">mutating</span> <span class="function"><span class="keyword">func</span> <span class="title">next</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> .off:</span><br><span class="line">            <span class="keyword">self</span> = .low</span><br><span class="line">        <span class="keyword">case</span> .low:</span><br><span class="line">            <span class="keyword">self</span> = .high</span><br><span class="line">        <span class="keyword">case</span> .high:</span><br><span class="line">            <span class="keyword">self</span> = .off</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> ovenLight = <span class="type">TriStateSwitch</span>.low</span><br><span class="line">ovenLight.next()</span><br><span class="line"><span class="comment">// ovenLight is now equal to .high</span></span><br><span class="line">ovenLight.next()</span><br><span class="line"><span class="comment">// ovenLight is now equal to .off</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Notice the use of the <code>mutating</code> keyword in the declaration of <code>SomeStructure</code> to mark a method that modifies the structure. The declaration of <code>SomeClass</code> doesn’t need any of its methods marked as mutating because methods on a class can always modify the class.</p>
+</blockquote>
+<h4 id="Recursive-Enumerations"><a href="#Recursive-Enumerations" class="headerlink" title="Recursive Enumerations"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Enumerations.html#ID536" target="_blank" rel="noopener">Recursive Enumerations</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">ArithmeticExpression</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> number(<span class="type">Int</span>)</span><br><span class="line">    <span class="keyword">indirect</span> <span class="keyword">case</span> addition(<span class="type">ArithmeticExpression</span>, <span class="type">ArithmeticExpression</span>)</span><br><span class="line">    <span class="keyword">indirect</span> <span class="keyword">case</span> multiplication(<span class="type">ArithmeticExpression</span>, <span class="type">ArithmeticExpression</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// enable indirection for all of the enumeration’s cases</span></span><br><span class="line"><span class="keyword">indirect</span> <span class="class"><span class="keyword">enum</span> <span class="title">ArithmeticExpression</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> number(<span class="type">Int</span>)</span><br><span class="line">    <span class="keyword">case</span> addition(<span class="type">ArithmeticExpression</span>, <span class="type">ArithmeticExpression</span>)</span><br><span class="line">    <span class="keyword">case</span> multiplication(<span class="type">ArithmeticExpression</span>, <span class="type">ArithmeticExpression</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Identity-Operators"><a href="#Identity-Operators" class="headerlink" title="Identity Operators"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID90" target="_blank" rel="noopener">Identity Operators</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> tenEighty === alsoTenEighty &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"tenEighty and alsoTenEighty refer to the same VideoMode instance."</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints "tenEighty and alsoTenEighty refer to the same VideoMode instance."</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Lazy-Stored-Properties"><a href="#Lazy-Stored-Properties" class="headerlink" title="Lazy Stored Properties"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID257" target="_blank" rel="noopener">Lazy Stored Properties</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataImporter</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    DataImporter is a class to import data from an external file.</span></span><br><span class="line"><span class="comment">    The class is assumed to take a nontrivial amount of time to initialize.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">var</span> filename = <span class="string">"data.txt"</span></span><br><span class="line">    <span class="comment">// the DataImporter class would provide data importing functionality here</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataManager</span> </span>&#123;</span><br><span class="line">    <span class="built_in">lazy</span> <span class="keyword">var</span> importer = <span class="type">DataImporter</span>()</span><br><span class="line">    <span class="keyword">var</span> data: [<span class="type">String</span>] = []</span><br><span class="line">    <span class="comment">// the DataManager class would provide data management functionality here</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> manager = <span class="type">DataManager</span>()</span><br><span class="line">manager.data.append(<span class="string">"Some data"</span>)</span><br><span class="line">manager.data.append(<span class="string">"Some more data"</span>)</span><br><span class="line"><span class="comment">// the DataImporter instance for the importer property hasn't yet been created</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Computed-Properties"><a href="#Computed-Properties" class="headerlink" title="Computed Properties"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID259" target="_blank" rel="noopener">Computed Properties</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">0.0</span>, y = <span class="number">0.0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Size</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> width = <span class="number">0.0</span>, height = <span class="number">0.0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Rect</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> origin = <span class="type">Point</span>()</span><br><span class="line">    <span class="keyword">var</span> size = <span class="type">Size</span>()</span><br><span class="line">    <span class="keyword">var</span> center: <span class="type">Point</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> centerX = origin.x + (size.width / <span class="number">2</span>)</span><br><span class="line">            <span class="keyword">let</span> centerY = origin.y + (size.height / <span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="type">Point</span>(x: centerX, y: centerY)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span>(newCenter) &#123;</span><br><span class="line">            origin.x = newCenter.x - (size.width / <span class="number">2</span>)</span><br><span class="line">            origin.y = newCenter.y - (size.height / <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> square = <span class="type">Rect</span>(origin: <span class="type">Point</span>(x: <span class="number">0.0</span>, y: <span class="number">0.0</span>),</span><br><span class="line">                  size: <span class="type">Size</span>(width: <span class="number">10.0</span>, height: <span class="number">10.0</span>))</span><br><span class="line"><span class="keyword">let</span> initialSquareCenter = square.center</span><br><span class="line">square.center = <span class="type">Point</span>(x: <span class="number">15.0</span>, y: <span class="number">15.0</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"square.origin is now at (\(square.origin.x), \(square.origin.y))"</span>)</span><br><span class="line"><span class="comment">// Prints "square.origin is now at (10.0, 10.0)"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Read-Only-Computed-Properties"><a href="#Read-Only-Computed-Properties" class="headerlink" title="Read-Only Computed Properties"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID261" target="_blank" rel="noopener">Read-Only Computed Properties</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Cuboid</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> width = <span class="number">0.0</span>, height = <span class="number">0.0</span>, depth = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">var</span> volume: <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> width * height * depth</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> fourByFiveByTwo = <span class="type">Cuboid</span>(width: <span class="number">4.0</span>, height: <span class="number">5.0</span>, depth: <span class="number">2.0</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)"</span>)</span><br><span class="line"><span class="comment">// Prints "the volume of fourByFiveByTwo is 40.0"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Property-Observers"><a href="#Property-Observers" class="headerlink" title="Property Observers"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID262" target="_blank" rel="noopener">Property Observers</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StepCounter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> totalSteps: <span class="type">Int</span> = <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">willSet</span>(newTotalSteps) &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"About to set totalSteps to \(newTotalSteps)"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">didSet</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> totalSteps &gt; oldValue  &#123;</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"Added \(totalSteps - oldValue) steps"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> stepCounter = <span class="type">StepCounter</span>()</span><br><span class="line">stepCounter.totalSteps = <span class="number">200</span></span><br><span class="line"><span class="comment">// About to set totalSteps to 200</span></span><br><span class="line"><span class="comment">// Added 200 steps</span></span><br><span class="line">stepCounter.totalSteps = <span class="number">360</span></span><br><span class="line"><span class="comment">// About to set totalSteps to 360</span></span><br><span class="line"><span class="comment">// Added 160 steps</span></span><br><span class="line">stepCounter.totalSteps = <span class="number">896</span></span><br><span class="line"><span class="comment">// About to set totalSteps to 896</span></span><br><span class="line"><span class="comment">// Added 536 steps</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Property-Wrappers"><a href="#Property-Wrappers" class="headerlink" title="Property Wrappers"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617" target="_blank" rel="noopener">Property Wrappers</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@propertyWrapper</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TwelveOrLess</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> number = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> wrappedValue: <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">return</span> number &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123; number = <span class="built_in">min</span>(newValue, <span class="number">12</span>) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SmallRectangle</span> </span>&#123;</span><br><span class="line">    @<span class="type">TwelveOrLess</span> <span class="keyword">var</span> height: <span class="type">Int</span></span><br><span class="line">    @<span class="type">TwelveOrLess</span> <span class="keyword">var</span> width: <span class="type">Int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> rectangle = <span class="type">SmallRectangle</span>()</span><br><span class="line"><span class="built_in">print</span>(rectangle.height)</span><br><span class="line"><span class="comment">// Prints "0"</span></span><br><span class="line"></span><br><span class="line">rectangle.height = <span class="number">10</span></span><br><span class="line"><span class="built_in">print</span>(rectangle.height)</span><br><span class="line"><span class="comment">// Prints "10"</span></span><br><span class="line"></span><br><span class="line">rectangle.height = <span class="number">24</span></span><br><span class="line"><span class="built_in">print</span>(rectangle.height)</span><br><span class="line"><span class="comment">// Prints "12"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Projecting-a-Value-From-a-Property-Wrapper"><a href="#Projecting-a-Value-From-a-Property-Wrapper" class="headerlink" title="Projecting a Value From a Property Wrapper"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID619" target="_blank" rel="noopener">Projecting a Value From a Property Wrapper</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@propertyWrapper</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SmallNumber</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> number = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> projectedValue = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">var</span> wrappedValue: <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">return</span> number &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> newValue &gt; <span class="number">12</span> &#123;</span><br><span class="line">                number = <span class="number">12</span></span><br><span class="line">                projectedValue = <span class="literal">true</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                number = newValue</span><br><span class="line">                projectedValue = <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SomeStructure</span> </span>&#123;</span><br><span class="line">    @<span class="type">SmallNumber</span> <span class="keyword">var</span> someNumber: <span class="type">Int</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> someStructure = <span class="type">SomeStructure</span>()</span><br><span class="line"></span><br><span class="line">someStructure.someNumber = <span class="number">4</span></span><br><span class="line"><span class="built_in">print</span>(someStructure.$someNumber)</span><br><span class="line"><span class="comment">// Prints "false"</span></span><br><span class="line"></span><br><span class="line">someStructure.someNumber = <span class="number">55</span></span><br><span class="line"><span class="built_in">print</span>(someStructure.$someNumber)</span><br><span class="line"><span class="comment">// Prints "true"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Type-Properties"><a href="#Type-Properties" class="headerlink" title="Type Properties"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID264" target="_blank" rel="noopener">Type Properties</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SomeStructure</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> storedTypeProperty = <span class="string">"Some value."</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> computedTypeProperty: <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SomeEnumeration</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> storedTypeProperty = <span class="string">"Some value."</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> computedTypeProperty: <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">6</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> storedTypeProperty = <span class="string">"Some value."</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> computedTypeProperty: <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">27</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">var</span> <span class="title">overrideableComputedTypeProperty</span>: <span class="title">Int</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">107</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Type-Methods"><a href="#Type-Methods" class="headerlink" title="Type Methods"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Methods.html#ID241" target="_blank" rel="noopener">Type Methods</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">someTypeMethod</span>() </span>&#123;</span><br><span class="line">        <span class="comment">// type method implementation goes here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">SomeClass</span>.someTypeMethod()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">LevelTracker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">var</span> highestUnlockedLevel = <span class="number">1</span></span><br><span class="line">    <span class="keyword">var</span> currentLevel = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">unlock</span><span class="params">(<span class="number">_</span> level: Int)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> level &gt; highestUnlockedLevel &#123; highestUnlockedLevel = level &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">isUnlocked</span><span class="params">(<span class="number">_</span> level: Int)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> level &lt;= highestUnlockedLevel</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@discardableResult</span></span><br><span class="line">    <span class="keyword">mutating</span> <span class="function"><span class="keyword">func</span> <span class="title">advance</span><span class="params">(to level: Int)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="type">LevelTracker</span>.isUnlocked(level) &#123;</span><br><span class="line">            currentLevel = level</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="discardableResult"><a href="#discardableResult" class="headerlink" title="@discardableResult"></a><a href="https://docs.swift.org/swift-book/ReferenceManual/Attributes.html#attributes" target="_blank" rel="noopener">@discardableResult</a></h4><blockquote>
+<p>The <code>discardableResult</code> attribute on a function declaration indicates that, although the function returns a value, the compiler shouldn’t generate a warning if the return value is unused.</p>
+</blockquote>
+<h4 id="Subscript-Syntax"><a href="#Subscript-Syntax" class="headerlink" title="Subscript Syntax"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Subscripts.html#ID306" target="_blank" rel="noopener">Subscript Syntax</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Matrix</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> rows: <span class="type">Int</span>, columns: <span class="type">Int</span></span><br><span class="line">    <span class="keyword">var</span> grid: [<span class="type">Double</span>]</span><br><span class="line">    <span class="keyword">init</span>(rows: <span class="type">Int</span>, columns: <span class="type">Int</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.rows = rows</span><br><span class="line">        <span class="keyword">self</span>.columns = columns</span><br><span class="line">        grid = <span class="type">Array</span>(repeating: <span class="number">0.0</span>, <span class="built_in">count</span>: rows * columns)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">indexIsValid</span><span class="params">(row: Int, column: Int)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> row &gt;= <span class="number">0</span> &amp;&amp; row &lt; rows &amp;&amp; column &gt;= <span class="number">0</span> &amp;&amp; column &lt; columns</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">subscript</span>(row: <span class="type">Int</span>, column: <span class="type">Int</span>) -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">            <span class="built_in">assert</span>(indexIsValid(row: row, column: column), <span class="string">"Index out of range"</span>)</span><br><span class="line">            <span class="keyword">return</span> grid[(row * columns) + column]</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123;</span><br><span class="line">            <span class="built_in">assert</span>(indexIsValid(row: row, column: column), <span class="string">"Index out of range"</span>)</span><br><span class="line">            grid[(row * columns) + column] = newValue</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> matrix = <span class="type">Matrix</span>(rows: <span class="number">2</span>, columns: <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">matrix[<span class="number">0</span>, <span class="number">1</span>] = <span class="number">1.5</span></span><br><span class="line">matrix[<span class="number">1</span>, <span class="number">0</span>] = <span class="number">3.2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> someValue = matrix[<span class="number">2</span>, <span class="number">2</span>]</span><br><span class="line"><span class="comment">// This triggers an assert, because [2, 2] is outside of the matrix bounds.</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Type-Subscripts"><a href="#Type-Subscripts" class="headerlink" title="Type Subscripts"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Subscripts.html#ID609" target="_blank" rel="noopener">Type Subscripts</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Planet</span>: <span class="title">Int</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> mercury = <span class="number">1</span>, venus, earth, mars, jupiter, saturn, uranus, neptune</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">subscript</span>(n: <span class="type">Int</span>) -&gt; <span class="type">Planet</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Planet</span>(rawValue: n)!</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> mars = <span class="type">Planet</span>[<span class="number">4</span>]</span><br><span class="line"><span class="built_in">print</span>(mars)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Overriding"><a href="#Overriding" class="headerlink" title="Overriding"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Inheritance.html#ID196" target="_blank" rel="noopener">Overriding</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Train</span>: <span class="title">Vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">makeNoise</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Choo Choo"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span>: <span class="title">Vehicle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> gear = <span class="number">1</span></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">var</span> description: <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.description + <span class="string">" in gear \(gear)"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AutomaticCar</span>: <span class="title">Car</span> </span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">var</span> currentSpeed: <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">didSet</span> &#123;</span><br><span class="line">            gear = <span class="type">Int</span>(currentSpeed / <span class="number">10.0</span>) + <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Preventing-Overrides"><a href="#Preventing-Overrides" class="headerlink" title="Preventing Overrides"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Inheritance.html#ID202" target="_blank" rel="noopener">Preventing Overrides</a></h4><ul>
+<li><code>final var</code></li>
+<li><code>final func</code></li>
+<li><code>final class func</code></li>
+<li><code>final subscript</code></li>
+<li><code>final class</code></li>
+</ul>
+<h4 id="Convenience-Initializers"><a href="#Convenience-Initializers" class="headerlink" title="Convenience Initializers"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID218" target="_blank" rel="noopener">Convenience Initializers</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">convenience</span> <span class="keyword">init</span>(parameters) &#123;</span><br><span class="line">    statements</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Required-Initializers"><a href="#Required-Initializers" class="headerlink" title="Required Initializers"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID231" target="_blank" rel="noopener">Required Initializers</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>() &#123;</span><br><span class="line">        <span class="comment">// initializer implementation goes here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeSubclass</span>: <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>() &#123;</span><br><span class="line">        <span class="comment">// subclass implementation of the required initializer goes here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Setting-a-Default-Property-Value-with-a-Closure-or-Function"><a href="#Setting-a-Default-Property-Value-with-a-Closure-or-Function" class="headerlink" title="Setting a Default Property Value with a Closure or Function"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID232" target="_blank" rel="noopener">Setting a Default Property Value with a Closure or Function</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> someProperty: <span class="type">SomeType</span> = &#123;</span><br><span class="line">        <span class="comment">// create a default value for someProperty inside this closure</span></span><br><span class="line">        <span class="comment">// someValue must be of the same type as SomeType</span></span><br><span class="line">        <span class="keyword">return</span> someValue</span><br><span class="line">    &#125;()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Representing-and-Throwing-Errors"><a href="#Representing-and-Throwing-Errors" class="headerlink" title="Representing and Throwing Errors"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID509" target="_blank" rel="noopener">Representing and Throwing Errors</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">VendingMachineError</span>: <span class="title">Error</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> invalidSelection</span><br><span class="line">    <span class="keyword">case</span> insufficientFunds(coinsNeeded: <span class="type">Int</span>)</span><br><span class="line">    <span class="keyword">case</span> outOfStock</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">throw</span> <span class="type">VendingMachineError</span>.insufficientFunds(coinsNeeded: <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Propagating-Errors-Using-Throwing-Functions"><a href="#Propagating-Errors-Using-Throwing-Functions" class="headerlink" title="Propagating Errors Using Throwing Functions"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID510" target="_blank" rel="noopener">Propagating Errors Using Throwing Functions</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">canThrowErrors</span><span class="params">()</span></span> <span class="keyword">throws</span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">if</span> ... &#123;</span><br><span class="line">        <span class="keyword">throw</span> ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Handling-Errors-Using-Do-Catch"><a href="#Handling-Errors-Using-Do-Catch" class="headerlink" title="Handling Errors Using Do-Catch"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID541" target="_blank" rel="noopener">Handling Errors Using Do-Catch</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> canThrowAnError()</span><br><span class="line">&#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">  <span class="comment">// an error was thrown</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Converting-Errors-to-Optional-Values"><a href="#Converting-Errors-to-Optional-Values" class="headerlink" title="Converting Errors to Optional Values"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID542" target="_blank" rel="noopener">Converting Errors to Optional Values</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">someThrowingFunction</span><span class="params">()</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> x = <span class="keyword">try</span>? someThrowingFunction()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> y: <span class="type">Int?</span></span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    y = <span class="keyword">try</span> someThrowingFunction()</span><br><span class="line">&#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    y = <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Disabling-Error-Propagation"><a href="#Disabling-Error-Propagation" class="headerlink" title="Disabling Error Propagation"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID513" target="_blank" rel="noopener">Disabling Error Propagation</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> photo = <span class="keyword">try</span>! loadImage(atPath: <span class="string">"./Resources/John Appleseed.jpg"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Specifying-Cleanup-Actions"><a href="#Specifying-Cleanup-Actions" class="headerlink" title="Specifying Cleanup Actions"></a><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID514" target="_blank" rel="noopener">Specifying Cleanup Actions</a></h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">processFile</span><span class="params">(filename: String)</span></span> <span class="keyword">throws</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> exists(filename) &#123;</span><br><span class="line">        <span class="keyword">let</span> file = <span class="keyword">open</span>(filename)</span><br><span class="line">        <span class="keyword">defer</span> &#123;</span><br><span class="line">            close(file)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">let</span> line = <span class="keyword">try</span> file.readline() &#123;</span><br><span class="line">            <span class="comment">// Work with the file.</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// close(file) is called here, at the end of the scope.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/swift/" rel="tag"><i class="fa fa-tag"></i> swift</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/14/ipatool/" rel="prev" title="利用 ipatool 下载 ipa 包">
+      <i class="fa fa-chevron-left"></i> 利用 ipatool 下载 ipa 包
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-Alias"><span class="nav-number">1.</span> <span class="nav-text">Type Alias</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Optional-Binding"><span class="nav-number">2.</span> <span class="nav-text">Optional Binding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Early-Exit"><span class="nav-number">3.</span> <span class="nav-text">Early Exit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Debugging-with-Assertions"><span class="nav-number">4.</span> <span class="nav-text">Debugging with Assertions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Enforcing-Preconditions"><span class="nav-number">5.</span> <span class="nav-text">Enforcing Preconditions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fatal-Error"><span class="nav-number">6.</span> <span class="nav-text">Fatal Error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fallthrough"><span class="nav-number">7.</span> <span class="nav-text">Fallthrough</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#where-in-switch"><span class="nav-number">8.</span> <span class="nav-text">where in switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Labeled-Statements"><span class="nav-number">9.</span> <span class="nav-text">Labeled Statements</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Checking-API-Availability"><span class="nav-number">10.</span> <span class="nav-text">Checking API Availability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Variadic-Parameters"><span class="nav-number">11.</span> <span class="nav-text">Variadic Parameters</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#In-Out-Parameters"><span class="nav-number">12.</span> <span class="nav-text">In-Out Parameters</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Escaping-Closures"><span class="nav-number">13.</span> <span class="nav-text">Escaping Closures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Autoclosures"><span class="nav-number">14.</span> <span class="nav-text">Autoclosures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mutating"><span class="nav-number">15.</span> <span class="nav-text">mutating</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Recursive-Enumerations"><span class="nav-number">16.</span> <span class="nav-text">Recursive Enumerations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Identity-Operators"><span class="nav-number">17.</span> <span class="nav-text">Identity Operators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lazy-Stored-Properties"><span class="nav-number">18.</span> <span class="nav-text">Lazy Stored Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Computed-Properties"><span class="nav-number">19.</span> <span class="nav-text">Computed Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Read-Only-Computed-Properties"><span class="nav-number">20.</span> <span class="nav-text">Read-Only Computed Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Property-Observers"><span class="nav-number">21.</span> <span class="nav-text">Property Observers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Property-Wrappers"><span class="nav-number">22.</span> <span class="nav-text">Property Wrappers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Projecting-a-Value-From-a-Property-Wrapper"><span class="nav-number">23.</span> <span class="nav-text">Projecting a Value From a Property Wrapper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-Properties"><span class="nav-number">24.</span> <span class="nav-text">Type Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-Methods"><span class="nav-number">25.</span> <span class="nav-text">Type Methods</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#discardableResult"><span class="nav-number">26.</span> <span class="nav-text">@discardableResult</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Subscript-Syntax"><span class="nav-number">27.</span> <span class="nav-text">Subscript Syntax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-Subscripts"><span class="nav-number">28.</span> <span class="nav-text">Type Subscripts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Overriding"><span class="nav-number">29.</span> <span class="nav-text">Overriding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Preventing-Overrides"><span class="nav-number">30.</span> <span class="nav-text">Preventing Overrides</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Convenience-Initializers"><span class="nav-number">31.</span> <span class="nav-text">Convenience Initializers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Required-Initializers"><span class="nav-number">32.</span> <span class="nav-text">Required Initializers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Setting-a-Default-Property-Value-with-a-Closure-or-Function"><span class="nav-number">33.</span> <span class="nav-text">Setting a Default Property Value with a Closure or Function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Representing-and-Throwing-Errors"><span class="nav-number">34.</span> <span class="nav-text">Representing and Throwing Errors</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Propagating-Errors-Using-Throwing-Functions"><span class="nav-number">35.</span> <span class="nav-text">Propagating Errors Using Throwing Functions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Handling-Errors-Using-Do-Catch"><span class="nav-number">36.</span> <span class="nav-text">Handling Errors Using Do-Catch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Converting-Errors-to-Optional-Values"><span class="nav-number">37.</span> <span class="nav-text">Converting Errors to Optional Values</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Disabling-Error-Propagation"><span class="nav-number">38.</span> <span class="nav-text">Disabling Error Propagation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Specifying-Cleanup-Actions"><span class="nav-number">39.</span> <span class="nav-text">Specifying Cleanup Actions</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZJQ"
+      src="/uploads/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ZJQ</p>
+  <div class="site-description" itemprop="description">Always Be Coding...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Coder-ZJQ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Coder-ZJQ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zjq_joker@163.com" title="E-Mail → mailto:zjq_joker@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/105506194418471567135" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;105506194418471567135" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/zjq.joker" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;zjq.joker" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/users/7356960/jokerq" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;users&#x2F;7356960&#x2F;jokerq" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://developer.apple.com/reference/" title="https:&#x2F;&#x2F;developer.apple.com&#x2F;reference&#x2F;" rel="noopener" target="_blank">Apple Developer Documentation</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://developer.apple.com/library/prerelease/content/navigation/" title="https:&#x2F;&#x2F;developer.apple.com&#x2F;library&#x2F;prerelease&#x2F;content&#x2F;navigation&#x2F;" rel="noopener" target="_blank">Apple Documentation Archive</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://opensource.apple.com/" title="https:&#x2F;&#x2F;opensource.apple.com&#x2F;" rel="noopener" target="_blank">Apple Open Source</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://dribbble.com/" title="https:&#x2F;&#x2F;dribbble.com&#x2F;" rel="noopener" target="_blank">dribbble</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pttrns.com/" title="https:&#x2F;&#x2F;pttrns.com&#x2F;" rel="noopener" target="_blank">pttrns</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.deviantart.com/" title="http:&#x2F;&#x2F;www.deviantart.com&#x2F;" rel="noopener" target="_blank">deviant art</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZJQ</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">53k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">48 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"NDR4ht5tQMwY98BfVRpuVxev-gzGzoHsz","app_key":"t8QAyw6QhVkCuOx3FUpHNehq","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NDR4ht5tQMwY98BfVRpuVxev-gzGzoHsz',
+      appKey     : 't8QAyw6QhVkCuOx3FUpHNehq',
+      placeholder: "Leave a comment",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
